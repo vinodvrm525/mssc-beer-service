@@ -25,7 +25,7 @@ public class BeerController {
 
     @PutMapping({"/{beerId}"})
     public ResponseEntity<BeerDto> updateBeer(@RequestBody BeerDto beerDto, @PathVariable("beerId") UUID beerId){
-        // TODO: 04-07-2020  
+        // TODO: 04-07-2020
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
