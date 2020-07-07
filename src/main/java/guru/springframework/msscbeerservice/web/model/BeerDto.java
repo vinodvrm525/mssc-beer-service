@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -26,10 +27,10 @@ public class BeerDto {
     private Integer version;
 
     @Null
-    private Date createdDate;
+    private OffsetDateTime createdDate;
 
     @Null
-    private Date lastModifiedDate;
+    private OffsetDateTime lastModifiedDate;
 
     @NotBlank
     private String BeerName;
