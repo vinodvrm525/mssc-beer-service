@@ -1,13 +1,17 @@
 package guru.springframework.msscbeerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.msscbeerservice.bootstrap.BeerLoader;
+import guru.springframework.msscbeerservice.service.BeerService;
 import guru.springframework.msscbeerservice.web.model.BeerDto;
 import guru.springframework.msscbeerservice.web.model.BeerStyle;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,6 +20,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @SpringBootConfiguration
 @WebMvcTest(BeerController.class)
@@ -27,8 +34,12 @@ public class BeerControllerTest {
     @Autowired
     ObjectMapper mapper;
 
+    @MockBean
+    BeerService beerService;
+
     @Test
     void getBeerById() throws Exception{
+        given(beerService.getBeerById(any())).willReturn(getValidBeerDto());
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/beer/"+ UUID.randomUUID().toString()).
                 accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -36,6 +47,7 @@ public class BeerControllerTest {
 
     @Test
     void saveNewBeer() throws Exception {
+        given(beerService.saveNewBeer(any())).willReturn(getValidBeerDto());
         BeerDto beerDto = getValidBeerDto();
         String beerDtoStr = mapper.writeValueAsString(beerDto);
         mockMvc.perform(
@@ -47,6 +59,7 @@ public class BeerControllerTest {
 
     @Test
     void updateBeer() throws Exception {
+        given(beerService.updateBeerById(any(),any())).willReturn(getValidBeerDto());
        BeerDto beerDto = getValidBeerDto();
        String beerDtoStr = mapper.writeValueAsString(beerDto);
 
@@ -59,7 +72,7 @@ public class BeerControllerTest {
                 .BeerName("My Beer")
                 .beerStyle(BeerStyle.ALE)
                 .price(new BigDecimal("2.99"))
-                .upc(123456789012L)
+                .upc(BeerLoader.BEER_1_UPC)
                 .build();
     }
 }
